@@ -27,6 +27,34 @@ const uploadToCloud = async (req, res) => {
     res.send({ success: 0, data: result.secure_url })
 }
 
+const upLoadAudioToCloud = async(req, res) =>{
+    const streamUpload = (req) => {
+        return new Promise((resolve, reject) => {
+            let stream = cloudinary.uploader.upload_stream(
+                {   
+                    folder: "audio",
+                    resource_type: "video"
+                },
+                (error, result) => {
+                    if (result) {
+                        resolve(result);
+                    } else {
+                        reject(error);
+                    }
+                }
+            );
+            streamifier.createReadStream(req.file.buffer).pipe(stream);
+        });
+    };
+    const result = await streamUpload(req);
+    res.send({ success: 0, data: result.secure_url })
+}
+const test=(req, res)=>{
+    
+    res.send('oke')
+}
 module.exports = {
     uploadToCloud,
+    upLoadAudioToCloud,
+    test
 }
