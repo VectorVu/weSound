@@ -6,10 +6,16 @@ const middlewares = require("../../common/middlewares");
 const memoryStorage = multer.memoryStorage()
 const uploadWithMemoryStorage = multer({ storage: memoryStorage })
 
-router.post("/",
-    middlewares.needAuthenticated,
+router.post("/audio",
+    // middlewares.needAuthenticated,
+    uploadWithMemoryStorage.single('file'),
+    uploadController.upLoadAudioToCloud
+);
+router.post("/img",
+    // middlewares.needAuthenticated,
     uploadWithMemoryStorage.single('file'),
     uploadController.uploadToCloud
 );
+router.get('/', uploadController.test)
 
 module.exports = router;
