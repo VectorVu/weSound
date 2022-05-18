@@ -1,9 +1,10 @@
 const CommentModel = require("./comment.model");
 const HttpError = require("../../common/httpError");
+const mongoose = require("mongoose");
 
 const createComment = async (req, res) => {
-    const { content, author, trackId } = req.body;
-    const newComment = await CommentModel.create({ content, author, trackId });
+    const { content, trackId } = req.body;
+    const newComment = await CommentModel.create({ content, author: req.user._id, trackId });
     if (!newComment) {
         throw new HttpError("Something broke!");
     }

@@ -1,13 +1,28 @@
 
 const mongoose = require("mongoose");
-const TrackModel = require("../track/track.model");
 
-const PlaylistModel = mongoose.Schema({
-    title: String,
+const PlaylistSchema = mongoose.Schema({
+    title: {
+        type: String,
+        required: true
+    },
     imageUrl: String,
-    desciption: String,
+    listDescription: String,
     streamable: Boolean,
-    tracks: [TrackModel]
+    createBy: {
+        type: mongoose.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
+    trackCount: {
+        type: Number,
+        default: 0
+    },
+    tracks: [{
+        type: mongoose.Types.ObjectId,
+        ref: 'Track'
+    }]
 
 })
+const PlaylistModel = mongoose.model('Playlist', PlaylistSchema);
 module.exports = PlaylistModel;

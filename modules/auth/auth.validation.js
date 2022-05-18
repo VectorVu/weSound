@@ -12,7 +12,9 @@ const registerSchema = Joi.object({
         .required(),
     repeatPassword: Joi.ref('password'),
     role: Joi.string()
-        .required()
+        .required(),
+    avatarUrl: Joi.string()
+        .pattern(new RegExp('^http'))
 })
 const loginSchema = Joi.object({
     username: Joi.string()

@@ -1,6 +1,8 @@
 const jwt = require("jsonwebtoken");
 const UserModel = require("../modules/auth/user");
 const TrackModel = require("../modules/track/track.model");
+const PlaylistModel = require("../modules/playlist/playlist.model");
+const CommentModel = require("../modules/comment/comment.model");
 const HttpError = require("./httpError");
 
 async function needAuthenticated(req, res, next) {
@@ -22,7 +24,7 @@ async function needAuthenticated(req, res, next) {
     req.user = existedUser;
     next();
 }
-async function isPoster(req, res, next) {
+async function isTrackPoster(req, res, next) {
     const { trackId } = req.params;
     const track = await TrackModel.findById(trackId);
     if (!track) {
@@ -34,6 +36,33 @@ async function isPoster(req, res, next) {
     }
     next();
 }
+
+async function isPlaylistCreater(req, res, next) {
+    const { playlistId } = req.params;
+    const playlist = await PlaylistModel.findById(playlistId);
+    if (!playlist) {
+        throw new HttpError(401, 'Not found playlist');
+    }
+    const isPlaylistCreater = req.user._id.equals(playlist.createBy);
+    if (!isPlaylistCreater) {
+        throw new HttpError(403, 'Not the creater');
+    }
+    next();
+}
+
+async function isCommentPoster(req, res, next) {
+    const { commentId } = req.params;
+    const comment = await CommentModel.findById(commentId);
+    if (!comment) {
+        throw new HttpError(401, 'Not found comment');
+    }
+    const isCommentPoster = req.user._id.equals(comment.author);
+    if (!isCommentPoster) {
+        throw new HttpError(403, 'Not the poster');
+    }
+    next();
+}
+
 const validateInput = (schema, property) => {
     return (req, res, next) => {
         const { error } = schema.validate(req[property]);
@@ -52,24 +81,19 @@ const validateInput = (schema, property) => {
 }
 const checkRole = (role) => {
     return (req, res, next) => {
-        if (!(req.user.role === role)) {
+        const isRole = req.user.role === role;
+        if (!isRole) {
             throw new HttpError(400, "invalid role");
         }
         next();
     }
 }
-const checkQuery = (req, res, next) => {
-    const { byPast } = req.query;
-    console.log(byPast);
-    if (!(+byPast === 1)) {
-        throw new HttpError(400, 'Invalid params');
-    }
-    next();
-}
+
 module.exports = {
     needAuthenticated,
-    isPoster,
+    isTrackPoster,
     validateInput,
     checkRole,
-    checkQuery
+    isCommentPoster,
+    isPlaylistCreater
 }

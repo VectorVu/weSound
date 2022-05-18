@@ -6,11 +6,12 @@ const TrackSchema = new mongoose.Schema({
     streamUrl: String,
     imageUrl: String,
     author: {
-        type: mongoose.Types.ObjectId,
+        type: String,
         required: true
     },
     poster:{
         type: mongoose.Types.ObjectId,
+        ref:'User',
         required: true 
     },
     streamable: Boolean,

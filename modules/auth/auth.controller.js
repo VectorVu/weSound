@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const HttpError = require("../../common/httpError");
 
 const register = async (req, res) => {
-    const { username, password, role } = req.body;
+    const { username, password, role, avatarUrl } = req.body;
     const existedUser = await UserModel.findOne({ username });
     if (existedUser) {
         throw new HttpError(400, 'Username duplicate');
@@ -14,7 +14,8 @@ const register = async (req, res) => {
     const newUser = await UserModel.create({
         username,
         password: hashPassword,
-        role
+        role,
+        avatarUrl
     });
     res.send({
         success: 1,

@@ -1,4 +1,4 @@
-const TrackModel = require("./Track.model");
+const TrackModel = require("./track.model");
 const HttpError = require("../../common/httpError");
 
 
@@ -30,8 +30,8 @@ const getATrack = async (req, res) => {
 
 const updateTrack = async (req, res) => {
     const { TrackId } = req.params;
-    const { streamUrl } = req.body;
-    const updateTrack = await TrackModel.findByIdAndUpdate(TrackId, { streamUrl }, { new: true });
+    const { streamUrl, title } = req.body;
+    const updateTrack = await TrackModel.findByIdAndUpdate(TrackId, { streamUrl, title }, { new: true });
     if (!updateTrack) {
         throw new HttpError(400, TrackId + " is not exist");
     }
