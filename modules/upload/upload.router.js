@@ -14,8 +14,7 @@ router.post("/audio",
 router.post("/img",
     // middlewares.needAuthenticated,
     uploadWithMemoryStorage.single('file'),
-    uploadController.uploadToCloud
+    uploadController.uploadImageToCloud
 );
-router.get('/', uploadController.test)
 
 module.exports = router;

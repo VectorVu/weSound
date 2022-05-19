@@ -7,11 +7,6 @@ const app = express();
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
-route(app)
-app.listen(process.env.PORT, () => {
-    console.log(`Example app listening on port ${process.env.PORT}`)
-  })
-
 
 mongoose.connect("mongodb://localhost:27017/testWesound", err => {
     if (err) return console.log("can not connect to MongoDb", err);

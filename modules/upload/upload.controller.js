@@ -8,10 +8,13 @@ cloudinary.config({
     secure: true,
 });
 
-const uploadToCloud = async (req, res) => {
+const uploadImageToCloud = async (req, res) => {
     const streamUpload = (req) => {
         return new Promise((resolve, reject) => {
             let stream = cloudinary.uploader.upload_stream(
+                {   
+                    folder: "images"
+                },
                 (error, result) => {
                     if (result) {
                         resolve(result);
@@ -49,12 +52,8 @@ const upLoadAudioToCloud = async(req, res) =>{
     const result = await streamUpload(req);
     res.send({ success: 0, data: result.secure_url })
 }
-const test=(req, res)=>{
-    
-    res.send('oke')
-}
+
 module.exports = {
-    uploadToCloud,
-    upLoadAudioToCloud,
-    test
+    uploadImageToCloud,
+    upLoadAudioToCloud
 }
