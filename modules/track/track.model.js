@@ -2,17 +2,31 @@ const mongoose = require("mongoose");
 
 // Track model
 const TrackSchema = new mongoose.Schema({
-    title: String,
-    streamUrl: String,
+    title: {
+        type: String,
+        required: true
+    },
+    streamUrl: {
+        type: String,
+        required: true
+    },
     imageUrl: String,
     author: {
         type: String,
         required: true
     },
-    poster:{
+    poster: {
         type: mongoose.Types.ObjectId,
-        ref:'User',
-        required: true 
+        ref: 'User',
+        required: true
+    },
+    likeCount: {
+        type: Number,
+        default: 0
+    },
+    playCount: {
+        type: Number,
+        default: 0
     },
     streamable: Boolean,
     genre: String

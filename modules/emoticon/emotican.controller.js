@@ -1,8 +1,12 @@
 const EmoticanModel = require("./emotican.model");
 const HttpError = require("../../common/httpError");
 
-const addEmotican = async (req, res) => {
+const likeTrack = async (req, res) => {
     const { trackId } = req.body;
+    const isLiked = await EmoticanModel.find({ $and: [{ userId: req.user._id }, { trackId: trackId }] });
+    if (isLiked.length) {
+        throw new HttpError(400, trackId + " was liked earlier");
+    }
     const newEmotican = await EmoticanModel.create({ trackId, userId: req.user._id });
     if (!newEmotican) {
         throw new HttpError("Something broke!");
@@ -10,13 +14,17 @@ const addEmotican = async (req, res) => {
     res.send({ success: 1, data: newEmotican });
 }
 
-const deleteEmotican = async (req, res) => {
-    const { emoticanId } = req.params;
-    const emoticanDelete = await EmoticanModel.findByIdAndDelete(emoticanId);
-    if (!emoticanDelete) {
-        throw new HttpError(400, emoticanId + " is not exist");
+const unlikeTrack = async (req, res) => {
+    const { trackId } = req.body;
+    const isLiked = await EmoticanModel.find({ $and: [{ userId: req.user._id }, { trackId: trackId }] });
+    if (!isLiked.length) {
+        throw new HttpError(400, trackId + " hasn't been liked yet");
     }
-    res.send({ success: 1, data: emoticanId + " has been deleted" });
+    const emoticanDelete = await EmoticanModel.findByIdAndDelete(isLiked[0]._id);
+    if (!emoticanDelete) {
+        throw new HttpError("Something broke!");
+    }
+    res.send({ success: 1, data: isLiked[0]._id + " has been deleted" });
 }
 
 const getAllEmoticanOfUser = async (req, res) => {
@@ -38,8 +46,8 @@ const getAllEmoticanOfTrack = async (req, res) => {
 }
 
 module.exports = {
-    addEmotican,
-    deleteEmotican,
+    likeTrack,
+    unlikeTrack,
     getAllEmoticanOfUser,
     getAllEmoticanOfTrack
 }

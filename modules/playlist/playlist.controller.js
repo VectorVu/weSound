@@ -32,7 +32,12 @@ const addTrackToPlaylist = async (req, res) => {
     if (isAddedTrack.length) {
         throw new HttpError(400, TrackId + " was added earlier");
     }
-    const addTrack = await PlaylistModel.findByIdAndUpdate(playlistId, { $push: { tracks: TrackId } }, { new: true });
+    const addTrack = await PlaylistModel.findByIdAndUpdate(
+        playlistId,
+        { $push: { tracks: TrackId } },
+        { $inc: { trackCount: 1 } },
+        { new: true }
+    );
     if (!addTrack) {
         throw new HttpError(400, playlistId + " is not exist");
     }
@@ -49,7 +54,12 @@ const removeTrackFromPlaylist = async (req, res) => {
     if (!isAddedTrack.length) {
         throw new HttpError(400, TrackId + " hasn't been added yet");
     }
-    const removeTrack = await PlaylistModel.findByIdAndUpdate(playlistId, { $pull: { tracks: TrackId } }, { new: true });
+    const removeTrack = await PlaylistModel.findByIdAndUpdate(
+        playlistId,
+        { $pull: { tracks: TrackId } },
+        { $inc: { trackCount: -1 } },
+        { new: true }
+    );
     if (!removeTrack) {
         throw new HttpError(400, playlistId + " is not exist");
     }
@@ -58,7 +68,7 @@ const removeTrackFromPlaylist = async (req, res) => {
 
 const getPlaylistById = async (req, res) => {
     const { playlistId } = req.params;
-    const playlist = await PlaylistModel.findById(playlistId);
+    const playlist = await PlaylistModel.findById(playlistId).populate('createBy', 'username');
     if (!playlist) {
         throw new HttpError(400, playlistId + " is not exist");
     }

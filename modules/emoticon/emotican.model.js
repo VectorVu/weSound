@@ -1,7 +1,10 @@
 const mongoose = require("mongoose");
 
 const EmoticanShema = new mongoose.Schema({
-    trackId: mongoose.Types.ObjectId,
+    trackId:{
+        type:mongoose.Types.ObjectId,
+        required: true
+    }, 
     userId: mongoose.Types.ObjectId,
     iconUrl: String
 }, {

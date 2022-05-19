@@ -15,18 +15,31 @@ router.post("/",
     middlewares.needAuthenticated,
     middlewares.checkRole("user"),
     middlewares.validateInput(createTrackSchema, "body"),
-    trackController.createTrack);
+    trackController.createTrack
+);
 
 router.put("/:trackId",
     middlewares.needAuthenticated,
     middlewares.isTrackPoster,
     middlewares.validateInput(updataTrackSchema, "body"),
-    trackController.updateTrack);
+    trackController.updateTrack
+);
+
+router.put("/like/:trackId",
+    middlewares.needAuthenticated,
+    trackController.updateTrack
+);
+
+router.put("/unlike/:trackId",
+    middlewares.needAuthenticated,
+    trackController.updateTrack
+);
 
 router.delete("/:trackId",
     middlewares.needAuthenticated,
     middlewares.isTrackPoster,
-    trackController.deleteTrack);
+    trackController.deleteTrack
+);
 
 router.get("/:trackId/comments", commentController.readCommentsOfATrack);
 

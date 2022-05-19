@@ -19,6 +19,34 @@ const createTrack = async (req, res) => {
     res.send({ success: 1, data: newTrack });
 }
 
+const likeTrack = async (req, res) => {
+    const { TrackId } = req.params;
+    const updatedTrack = await PostModel
+        .findByIdAndUpdate(
+            TrackId,
+            { $inc: { likeCount: 1 } },
+            { new: true }
+        );
+    if (!updatedTrack) {
+        throw new HttpError(400, TrackId + " is not exist");
+    }
+    res.send({ success: 1, data: updatedTrack });
+}
+
+const unlikeTrack = async (req, res) => {
+    const { TrackId } = req.params;
+    const updatedTrack = await PostModel
+        .findByIdAndUpdate(
+            TrackId,
+            { $inc: { likeCount: -1 } },
+            { new: true }
+        );
+    if (!updatedTrack) {
+        throw new HttpError(400, TrackId + " is not exist");
+    }
+    res.send({ success: 1, data: updatedTrack });
+}
+
 const getATrack = async (req, res) => {
     const { TrackId } = req.params;
     const Track = await TrackModel.findById(TrackId);
@@ -52,5 +80,7 @@ module.exports = {
     getTracks,
     getATrack,
     updateTrack,
-    deleteTrack
+    deleteTrack,
+    likeTrack,
+    unlikeTrack
 }
