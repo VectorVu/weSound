@@ -20,6 +20,15 @@ const authRouter = require("./modules/auth/auth.router");
 const playlistRouter = require("./modules/playlist/playlist.router");
 const uploadRouter = require("./modules/upload/upload.router");
 
+const cors = require('cors');
+const corsOptions ={
+    origin:'http://localhost:3000', 
+    credentials:true,            //access-control-allow-credentials:true
+    optionSuccessStatus:200
+}
+
+app.use(cors(corsOptions));
+
 app.use('/api/track', trackRouter);
 app.use('/api/comment', commentRouter);
 app.use('/api/emotican', emoticanRouter);

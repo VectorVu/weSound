@@ -14,7 +14,7 @@ const UserSchema = new mongoose.Schema({
     },
     role:{
         type: String,
-        required:true
+        // required:true
     }
 },{
     timestamps:true
