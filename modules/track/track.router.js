@@ -13,7 +13,6 @@ router.get("/:trackId", trackController.getATrack);
 
 router.post("/",
     middlewares.needAuthenticated,
-    middlewares.checkRole("user"),
     middlewares.validateInput(createTrackSchema, "body"),
     trackController.createTrack
 );

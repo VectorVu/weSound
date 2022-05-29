@@ -6,6 +6,7 @@ const createTrackSchema = Joi.object({
         .max(100)
         .required(),
     streamUrl: Joi.string()
+        .pattern(new RegExp('mp3$'))
         .required(),
     imageUrl: Joi.string()
         .pattern(new RegExp('^http'))
@@ -13,7 +14,8 @@ const createTrackSchema = Joi.object({
     author: Joi.string()
         .min(1)
         .max(70)
-        .required()
+        .required(),
+    genre: Joi.string()
 })
 const updataTrackSchema = Joi.object({
     title: Joi.string()

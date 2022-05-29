@@ -27,7 +27,7 @@ const uploadImageToCloud = async (req, res) => {
         });
     };
     const result = await streamUpload(req);
-    res.send({ success: 0, data: result.secure_url })
+    res.send({ success: 1, data: result.secure_url })
 }
 
 const upLoadAudioToCloud = async(req, res) =>{
@@ -50,7 +50,7 @@ const upLoadAudioToCloud = async(req, res) =>{
         });
     };
     const result = await streamUpload(req);
-    res.send({ success: 0, data: result.secure_url })
+    res.send({ success: 1, data: result.secure_url })
 }
 
 module.exports = {
