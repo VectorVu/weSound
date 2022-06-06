@@ -25,6 +25,7 @@ const register = async (req, res) => {
         }
     })
 }
+
 const login = async (req, res) => {
     const { username, password } = req.body;
     const existedUser = await UserModel.findOne({ username });
@@ -47,12 +48,22 @@ const login = async (req, res) => {
     res.send({
         success: 1,
         data: {
+            username: data.username,
             _id: data.userId,
             token
         }
     })
 }
+
+const verify = async (req, res) => {
+    const { user } = req;
+    res.send({
+        success: 1,
+        data: user
+    })
+}
 module.exports = {
     register,
-    login
+    login,
+    verify
 }

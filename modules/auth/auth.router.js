@@ -9,6 +9,8 @@ router.post("/register",
     authController.register);
 router.post("/login",
     middlewares.validateInput(loginSchema, "body"),
-    authController.login)
-
+    authController.login);
+router.get("/verify",
+    middlewares.needAuthenticated,
+    authController.verify);
 module.exports = router;
