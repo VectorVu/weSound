@@ -7,12 +7,12 @@ const memoryStorage = multer.memoryStorage()
 const uploadWithMemoryStorage = multer({ storage: memoryStorage })
 
 router.post("/audio",
-    // middlewares.needAuthenticated,
+    middlewares.needAuthenticated,
     uploadWithMemoryStorage.single('file'),
     uploadController.upLoadAudioToCloud
 );
 router.post("/img",
-    // middlewares.needAuthenticated,
+    middlewares.needAuthenticated,
     uploadWithMemoryStorage.single('file'),
     uploadController.uploadImageToCloud
 );

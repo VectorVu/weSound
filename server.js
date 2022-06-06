@@ -20,6 +20,9 @@ const authRouter = require("./modules/auth/auth.router");
 const playlistRouter = require("./modules/playlist/playlist.router");
 const uploadRouter = require("./modules/upload/upload.router");
 
+app.get("/", (req, res)=>{
+    res.send('<h1>Đây là demo weSound</h1><br><p>Test các api khác bằng Postman qua đường dẫn trang web/api/... Register -> login -> lấy token -> tạo post -> tạo comment ||upload ảnh,.... </p>')
+})
 
 app.use('/api/track', trackRouter);
 app.use('/api/comment', commentRouter);
@@ -39,6 +42,6 @@ app.use(function (err, req, res, next) {
 
 app.listen(process.env.PORT || 9009, err => {
     if (err) return console.log("can not start");
-    console.log("successs started at 9009");
+    console.log("successs started at Port");
 })
 
