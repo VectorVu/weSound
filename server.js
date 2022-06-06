@@ -8,7 +8,7 @@ app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
 
-mongoose.connect("mongodb://localhost:27017/testWesound", err => {
+mongoose.connect(process.env.MONGODB_URL, err => {
     if (err) return console.log("can not connect to MongoDb", err);
     console.log("successful connection to MongoBb");
 })
@@ -20,14 +20,6 @@ const authRouter = require("./modules/auth/auth.router");
 const playlistRouter = require("./modules/playlist/playlist.router");
 const uploadRouter = require("./modules/upload/upload.router");
 
-const cors = require('cors');
-const corsOptions ={
-    origin:'http://localhost:3000', 
-    credentials:true,            //access-control-allow-credentials:true
-    optionSuccessStatus:200
-}
-
-app.use(cors(corsOptions));
 
 app.use('/api/track', trackRouter);
 app.use('/api/comment', commentRouter);
