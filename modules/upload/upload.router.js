@@ -12,7 +12,6 @@ router.post("/audio",
     uploadController.upLoadAudioToCloud
 );
 router.post("/img",
-    middlewares.needAuthenticated,
     uploadWithMemoryStorage.single('file'),
     uploadController.uploadImageToCloud
 );
