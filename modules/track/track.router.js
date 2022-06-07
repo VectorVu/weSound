@@ -7,9 +7,9 @@ const middlewares = require("../../common/middlewares");
 const { createTrackSchema, updataTrackSchema } = require("./track.validation");
 
 // router tập hợp các API có điểm chung => track
-router.get("/", trackController.getTracks);
 
 router.get("/:trackId", trackController.getATrack);
+router.get("/", trackController.getTracksByQuery);
 
 router.post("/",
     middlewares.needAuthenticated,

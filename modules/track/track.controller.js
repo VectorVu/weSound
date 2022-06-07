@@ -2,14 +2,6 @@ const TrackModel = require("./track.model");
 const HttpError = require("../../common/httpError");
 
 
-const getTracks = async (req, res) => {
-    const Tracks = await TrackModel.find();
-    if (!Tracks) {
-        throw new HttpError("Something broke!");
-    }
-    res.send({ success: 1, data: Tracks });
-}
-
 const createTrack = async (req, res) => {
     const { title, streamUrl, imageUrl, author } = req.body;
     const newTrack = await TrackModel.create({ title, streamUrl, imageUrl, author, poster: req.user._id });
@@ -56,6 +48,25 @@ const getATrack = async (req, res) => {
     res.send({ success: 1, data: Track });
 }
 
+const getTracksByQuery = async(req, res)=>{
+    let filter={};
+    const {poster, q} = req.query;
+    if(poster){
+        filter.poster = poster;
+    }
+    if(q){
+        const regex = new RegExp(`${q}`, 'i');
+        const regexCond = { $regex: regex };
+        console.log(regexCond);
+        filter.title = regexCond;   
+    }
+    const Track = await TrackModel.find(filter);
+    if (!Track) {
+        throw new HttpError(400, "Not found");
+    }
+    res.send({success:1, data: Track});
+}
+
 const updateTrack = async (req, res) => {
     const { TrackId } = req.params;
     const { streamUrl, title } = req.body;
@@ -77,10 +88,10 @@ const deleteTrack = async (req, res) => {
 
 module.exports = {
     createTrack,
-    getTracks,
     getATrack,
     updateTrack,
     deleteTrack,
     likeTrack,
-    unlikeTrack
+    unlikeTrack,
+    getTracksByQuery
 }
