@@ -3,10 +3,10 @@ require('express-async-errors');
 const route = require('./modules/route.index')
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require('cors');
 const app = express();
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
-
 
 
 mongoose.connect(process.env.MONGODB_URL, err => {
@@ -24,13 +24,12 @@ const uploadRouter = require("./modules/upload/upload.router");
 app.get("/", (req, res)=>{
     res.send('<h1>Đây là demo weSound</h1><br><p>Test các api khác bằng Postman qua đường dẫn trang web/api/... Register -> login -> lấy token -> tạo post -> tạo comment ||upload ảnh,.... </p>')
 })
-const cors = require('cors');
+
 const corsOptions ={
-    origin:process.env.CORS_ACCESS_URL, 
+    origin: process.env.CORS_ACCESS_URL, 
     credentials:true,            //access-control-allow-credentials:true
     optionSuccessStatus:200
 }
-
 app.use(cors(corsOptions));
 app.use('/api/track', trackRouter);
 app.use('/api/comment', commentRouter);
