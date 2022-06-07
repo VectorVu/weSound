@@ -10,7 +10,7 @@ const registerSchema = Joi.object({
         .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$'))
         .min(8)
         .required(),
-    repeatPassword: Joi.ref('password'),
+    confirmPassword: Joi.ref('password'),
     role: Joi.string(),
         // .required(),
     avatarUrl: Joi.string()
