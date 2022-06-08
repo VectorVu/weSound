@@ -10,7 +10,6 @@ router.get("/:playlistId", playlistController.getPlaylistById);
 
 router.post("/", 
     middlewares.needAuthenticated,
-    middlewares.checkRole("user"),
     middlewares.validateInput(createPlaylistSchema, "body"),
     playlistController.createPlaylist
 );

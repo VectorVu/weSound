@@ -6,7 +6,6 @@ const { createCommentSchema, updateCommentSchema } = require("./comment.validati
 
 router.post("/",
     middlewares.needAuthenticated,
-    middlewares.checkRole("user"),
     middlewares.validateInput(createCommentSchema, "body"),
     commentController.createComment);
 
