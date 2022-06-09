@@ -12,40 +12,48 @@ const createTrack = async (req, res) => {
 }
 
 const likeTrack = async (req, res) => {
-    const { TrackId } = req.params;
-    const updatedTrack = await PostModel
+    const { trackId } = req.params;
+    const updatedTrack = await TrackModel
         .findByIdAndUpdate(
-            TrackId,
+            trackId,
             { $inc: { likeCount: 1 } },
             { new: true }
         );
     if (!updatedTrack) {
-        throw new HttpError(400, TrackId + " is not exist");
+        throw new HttpError(400, trackId + " is not exist");
     }
     res.send({ success: 1, data: updatedTrack });
 }
 
 const unlikeTrack = async (req, res) => {
-    const { TrackId } = req.params;
-    const updatedTrack = await PostModel
+    const { trackId } = req.params;
+    const updatedTrack = await TrackModel
         .findByIdAndUpdate(
-            TrackId,
+            trackId,
             { $inc: { likeCount: -1 } },
             { new: true }
         );
     if (!updatedTrack) {
-        throw new HttpError(400, TrackId + " is not exist");
+        throw new HttpError(400, trackId + " is not exist");
     }
     res.send({ success: 1, data: updatedTrack });
 }
 
 const getATrack = async (req, res) => {
-    const { TrackId } = req.params;
-    const Track = await TrackModel.findById(TrackId);
+    const { trackId } = req.params;
+    const Track = await TrackModel.findById(trackId).populate('poster', 'username avatarUrl');
     if (!Track) {
-        throw new HttpError(400, TrackId + " is not exist");
+        throw new HttpError(400, trackId + " is not exist");
     }
     res.send({ success: 1, data: Track });
+}
+const getAllTrackByUserId = async(req, res)=>{
+    const{userId} = req.params;
+    const tracks = await TrackModel.find({poster:userId}).populate('poster', 'username');
+    if (!tracks) {
+        throw new HttpError(400, userId + " is not exist");
+    }
+    res.send({ success: 1, data: tracks });
 }
 
 const getTracksByQuery = async(req, res)=>{
@@ -68,24 +76,43 @@ const getTracksByQuery = async(req, res)=>{
 }
 
 const updateTrack = async (req, res) => {
-    const { TrackId } = req.params;
+    const { trackId } = req.params;
     const { streamUrl, title } = req.body;
-    const updateTrack = await TrackModel.findByIdAndUpdate(TrackId, { streamUrl, title }, { new: true });
+    const updateTrack = await TrackModel.findByIdAndUpdate(trackId, { streamUrl, title }, { new: true });
     if (!updateTrack) {
-        throw new HttpError(400, TrackId + " is not exist");
+        throw new HttpError(400, trackId + " is not exist");
     }
     res.send({ success: 1, data: updateTrack });
 }
 
 const deleteTrack = async (req, res) => {
-    const { TrackId } = req.params;
-    const TrackDelete = await TrackModel.findByIdAndDelete(TrackId);
+    const { trackId } = req.params;
+    const TrackDelete = await TrackModel.findByIdAndDelete(trackId);
     if (!TrackDelete) {
-        throw new HttpError(400, TrackId + " is not exist");
+        throw new HttpError(400, trackId + " is not exist");
     }
-    res.send({ success: 1, data: TrackId + " has been deleted" });
+    res.send({ success: 1, data: trackId + " has been deleted" });
 }
-
+const addPlayCount =async (req, res)=>{
+    const { trackId } = req.params;
+    const updatedTrack = await TrackModel
+        .findByIdAndUpdate(
+            trackId,
+            { $inc: { playCount: 1 } },
+            { new: true }
+        );
+    if (!updatedTrack) {
+        throw new HttpError(400, trackId + " is not exist");
+    }
+    res.send({ success: 1, data: updatedTrack });
+}
+const getTrendingTracks = async(req, res)=>{
+    const trending = await TrackModel.find().sort({playCount:-1}).populate('poster', 'username');
+    if(!trending){
+        throw new HttpError("Something broke!");
+    }
+    res.send({ success: 1, data: trending });
+}
 module.exports = {
     createTrack,
     getATrack,
@@ -93,5 +120,8 @@ module.exports = {
     deleteTrack,
     likeTrack,
     unlikeTrack,
-    getTracksByQuery
+    getTracksByQuery,
+    getAllTrackByUserId,
+    addPlayCount,
+    getTrendingTracks
 }

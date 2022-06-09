@@ -8,7 +8,7 @@ const { createTrackSchema, updataTrackSchema } = require("./track.validation");
 
 // router tập hợp các API có điểm chung => track
 
-router.get("/:trackId", trackController.getATrack);
+router.get("/detail/:trackId", trackController.getATrack);
 router.get("/", trackController.getTracksByQuery);
 
 router.post("/",
@@ -33,13 +33,13 @@ router.put("/unlike/:trackId",
     middlewares.needAuthenticated,
     trackController.updateTrack
 );
-
+router.put("/playcount/:trackId", trackController.addPlayCount);
 router.delete("/:trackId",
     middlewares.needAuthenticated,
     middlewares.isTrackPoster,
     trackController.deleteTrack
 );
-
+router.get("/trend", trackController.getTrendingTracks);
 router.get("/:trackId/comments", commentController.readCommentsOfATrack);
-
+router.get("/byuser/:userId", trackController.getAllTrackByUserId);
 module.exports = router;
