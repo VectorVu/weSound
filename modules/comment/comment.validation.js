@@ -5,8 +5,6 @@ const createCommentSchema = Joi.object({
         .min(1)
         .max(200)
         .required(),
-    trackId: Joi.string()
-        .required()
 })
 
 const updateCommentSchema = Joi.object({

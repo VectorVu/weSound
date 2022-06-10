@@ -26,8 +26,8 @@ app.get("/", (req, res)=>{
 })
 
 const corsOptions ={
-    origin: process.env.CORS_ACCESS_URL||"http://localhost:3000", 
-    // origin:"http://localhost:3000",
+    // origin: process.env.CORS_ACCESS_URL, 
+    origin:"http://localhost:3000",
     credentials:true,            //access-control-allow-credentials:true
     optionSuccessStatus:200
 }

@@ -3,7 +3,8 @@ const HttpError = require("../../common/httpError");
 const mongoose = require("mongoose");
 
 const createComment = async (req, res) => {
-    const { content, trackId } = req.body;
+    const {trackId}= req.params;
+    const { content } = req.body;
     const newComment = await CommentModel.create({ content, author: req.user._id, trackId });
     if (!newComment) {
         throw new HttpError("Something broke!");
@@ -13,7 +14,7 @@ const createComment = async (req, res) => {
 // read all comments of a post
 const readCommentsOfATrack = async (req, res) => {
     const { trackId } = req.params;
-    const commentsOftrack = await CommentModel.find({ trackId: trackId });
+    const commentsOftrack = await CommentModel.find({ trackId: trackId }).populate('author', 'username avatarUrl');
     if (!commentsOftrack) {
         throw new HttpError(400, trackId + " is not exist");
     }
