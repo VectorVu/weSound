@@ -65,10 +65,9 @@ const getTracksByQuery = async(req, res)=>{
     if(q){
         const regex = new RegExp(`${q}`, 'i');
         const regexCond = { $regex: regex };
-        console.log(regexCond);
         filter.title = regexCond;   
     }
-    const Track = await TrackModel.find(filter);
+    const Track = await TrackModel.find(filter).populate('poster', 'username');
     if (!Track) {
         throw new HttpError(400, "Not found");
     }
